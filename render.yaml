@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: silent-sos-phase1
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ENABLE_SMS
+        value: "false"
+      - key: ENABLE_EMAIL
+        value: "false"
+      - key: NOTIFICATION_TEST_MODE
+        value: "true"
