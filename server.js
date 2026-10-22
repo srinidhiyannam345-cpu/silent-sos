@@ -234,8 +234,8 @@ app.get('/api/admin/report', auth, adminOnly, async (req, res) => {
   res.json({ total: all.length, active: all.filter(a => a.status !== 'resolved').length, acknowledged: all.filter(a => a.status === 'acknowledged').length, resolved: all.filter(a => a.status === 'resolved').length, averageAcknowledgementSeconds: avgAckSeconds, averageResolutionSeconds: avgResolveSeconds });
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.use(express.static(path.join(__dirname)));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.use((err, req, res, next) => { console.error(err); res.status(500).json({ error: 'Unexpected server error.' }); });
 
 async function start() {
