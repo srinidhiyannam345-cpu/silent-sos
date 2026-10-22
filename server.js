@@ -115,6 +115,7 @@ async function notifyContacts(user, alert, contacts) {
     }
   }
 }
+app.set('trust proxy', 1);
 
 app.use(session({
   name: 'silent_sos.sid', secret: process.env.SESSION_SECRET || 'dev-only-change-this-secret',
