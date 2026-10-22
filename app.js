@@ -61,10 +61,27 @@ async function loadContacts() {
   $('#contactsList').innerHTML = state.contacts.length ? state.contacts.map(c => `<div class="item"><div><strong>${esc(c.name)}</strong><p>${c.phone ? `Phone: ${esc(c.phone)}<br>` : ''}${c.email ? `Email: ${esc(c.email)}<br>` : ''}Consent confirmed</p></div><div class="item-actions"><button class="btn btn-quiet mini" data-delete-contact="${esc(c._id)}">Remove</button></div></div>`).join('') : '<p class="muted">No contacts yet. Add someone who has agreed to receive alerts.</p>';
 }
 $('#contactForm').addEventListener('submit', async e => {
-  e.preventDefault(); const f = new FormData(e.currentTarget); const body = Object.fromEntries(f); body.consent = f.get('consent') === 'on';
-  try { await api('/api/contacts', { method: 'POST', body }); e.currentTarget.reset(); await loadContacts(); banner('Trusted contact added. Notifications remain in test mode until configured.'); }
-  catch (err) { banner(err.message, true); }
+  e.preventDefault();
+
+  const form = e.currentTarget;
+  const f = new FormData(form);
+  const body = Object.fromEntries(f);
+  body.consent = f.get('consent') === 'on';
+
+  try {
+    await api('/api/contacts', {
+      method: 'POST',
+      body
+    });
+
+    form.reset();
+    await loadContacts();
+    banner('Trusted contact added. Notifications remain in test mode until configured.');
+  } catch (err) {
+    banner(err.message, true);
+  }
 });
+
 $('#contactsList').addEventListener('click', async e => {
   const b = e.target.closest('[data-delete-contact]'); if (!b) return;
   if (!confirm('Remove this trusted contact?')) return;
