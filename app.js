@@ -4,7 +4,10 @@ const state = { user: null, contacts: [], alerts: [], activeId: null, watchId: n
 async function api(url, options = {}) {
   const opts = { ...options, headers: { ...(options.body ? { 'Content-Type': 'application/json' } : {}), ...(options.headers || {}) } };
   if (opts.body && typeof opts.body !== 'string') opts.body = JSON.stringify(opts.body);
-  const response = await fetch(url, opts);
+  const response = await fetch(url, {
+  ...opts,
+  credentials: 'same-origin'
+});
   let data = {}; try { data = await response.json(); } catch {}
   if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`);
   return data;
